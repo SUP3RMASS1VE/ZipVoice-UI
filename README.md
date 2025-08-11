@@ -50,8 +50,17 @@ This UI simply wraps their powerful TTS models in an accessible web interface.
 * Optional language override for transcription.
 
 ---
-
 ## 📦 Installation
+
+## Option 1.
+
+Install via [Pinokio](https://pinokio.co)
+You can use the Pinokio script here for one-click setup:
+[Pinokio App Installer](https://pinokio.co/item.html?uri=https%3A%2F%2Fgithub.com%2FSUP3RMASS1VE%2FZipVoice-Pinokio&parent_frame=&theme=null)
+
+---
+
+## Option 2
 
 1. **Clone the repository**:
 
