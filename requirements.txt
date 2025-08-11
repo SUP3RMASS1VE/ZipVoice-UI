@@ -8,6 +8,8 @@ huggingface_hub
 safetensors
 tensorboard
 vocos
+faster-whisper
+
 
 # Normalization
 cn2an
