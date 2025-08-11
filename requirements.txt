@@ -10,6 +10,7 @@ tensorboard
 vocos
 gradio
 faster-whisper
+tqdm
 
 
 # Normalization
