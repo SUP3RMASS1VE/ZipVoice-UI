@@ -57,28 +57,15 @@ This UI simply wraps their powerful TTS models in an accessible web interface.
    ```bash
    git clone https://github.com/SUP3RMASS1VE/ZipVoice-UI.git
    cd ZipVoice-UI
+
+   python -m venv venv
+   venv\Scripts\activate
+
+   pip install uv
+   uv pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu128
+   uv pip install -r requirements.txt
    ```
 
-2. **Install dependencies**:
-
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-   Main libraries include:
-
-   * `torch`
-   * `gradio`
-   * `huggingface_hub`
-   * `faster-whisper`
-   * ZipVoice + tokenizer dependencies
-
-3. **(Optional) Install GPU-enabled PyTorch**
-   If you have CUDA:
-
-   ```bash
-   pip install torch --index-url https://download.pytorch.org/whl/cu118
-   ```
 
 ---
 
@@ -92,12 +79,6 @@ By default, the UI will be served at:
 
 ```
 http://127.0.0.1:7860
-```
-
-You can change the port with:
-
-```bash
-PORT=9000 python zipvoice/bin/gradio_app.py
 ```
 
 ---
