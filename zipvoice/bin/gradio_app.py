@@ -18,6 +18,18 @@ _PROJECT_ROOT = _FILE.parents[2]
 if str(_PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(_PROJECT_ROOT))
 
+# Silence the noisy k2 fallback warning from scaling.py
+_root_logger = logging.getLogger()
+
+class _SilenceK2Fallback(logging.Filter):
+    def filter(self, record: logging.LogRecord) -> bool:
+        msg = record.getMessage()
+        if "Failed import k2" in msg and "Swoosh functions will fallback" in msg:
+            return False
+        return True
+
+_root_logger.addFilter(_SilenceK2Fallback())
+
 from zipvoice.bin.infer_zipvoice import (
     HUGGINGFACE_REPO,
     MODEL_DIR,
