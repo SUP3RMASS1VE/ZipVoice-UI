@@ -1,261 +1,148 @@
 
-<div align="right">
-  <details>
-    <summary >🌐 Language</summary>
-    <div>
-      <div align="center">
-        <a href="https://openaitx.github.io/view.html?user=k2-fsa&project=ZipVoice&lang=en">English</a>
-        | <a href="https://openaitx.github.io/view.html?user=k2-fsa&project=ZipVoice&lang=zh-CN">简体中文</a>
-        | <a href="https://openaitx.github.io/view.html?user=k2-fsa&project=ZipVoice&lang=zh-TW">繁體中文</a>
-        | <a href="https://openaitx.github.io/view.html?user=k2-fsa&project=ZipVoice&lang=ja">日本語</a>
-        | <a href="https://openaitx.github.io/view.html?user=k2-fsa&project=ZipVoice&lang=ko">한국어</a>
-        | <a href="https://openaitx.github.io/view.html?user=k2-fsa&project=ZipVoice&lang=hi">हिन्दी</a>
-        | <a href="https://openaitx.github.io/view.html?user=k2-fsa&project=ZipVoice&lang=th">ไทย</a>
-        | <a href="https://openaitx.github.io/view.html?user=k2-fsa&project=ZipVoice&lang=fr">Français</a>
-        | <a href="https://openaitx.github.io/view.html?user=k2-fsa&project=ZipVoice&lang=de">Deutsch</a>
-        | <a href="https://openaitx.github.io/view.html?user=k2-fsa&project=ZipVoice&lang=es">Español</a>
-        | <a href="https://openaitx.github.io/view.html?user=k2-fsa&project=ZipVoice&lang=it">Itapano</a>
-        | <a href="https://openaitx.github.io/view.html?user=k2-fsa&project=ZipVoice&lang=ru">Русский</a>
-        | <a href="https://openaitx.github.io/view.html?user=k2-fsa&project=ZipVoice&lang=pt">Português</a>
-        | <a href="https://openaitx.github.io/view.html?user=k2-fsa&project=ZipVoice&lang=nl">Nederlands</a>
-        | <a href="https://openaitx.github.io/view.html?user=k2-fsa&project=ZipVoice&lang=pl">Polski</a>
-        | <a href="https://openaitx.github.io/view.html?user=k2-fsa&project=ZipVoice&lang=ar">العربية</a>
-        | <a href="https://openaitx.github.io/view.html?user=k2-fsa&project=ZipVoice&lang=fa">فارسی</a>
-        | <a href="https://openaitx.github.io/view.html?user=k2-fsa&project=ZipVoice&lang=tr">Türkçe</a>
-        | <a href="https://openaitx.github.io/view.html?user=k2-fsa&project=ZipVoice&lang=vi">Tiếng Việt</a>
-        | <a href="https://openaitx.github.io/view.html?user=k2-fsa&project=ZipVoice&lang=id">Bahasa Indonesia</a>
-      </div>
-    </div>
-  </details>
-</div>
+# ZipVoice-UI
 
-<div align="center">
+A **Gradio-based web interface** for the [ZipVoice](https://github.com/k2-fsa/ZipVoice) speech synthesis system.
+This UI makes it easy to:
 
-# ZipVoice⚡
+* Clone a voice from a short audio prompt.
+* Generate **single-speaker** or **multi-speaker dialogues**.
+* Optionally auto-transcribe prompts using [faster-whisper](https://github.com/guillaumekln/faster-whisper).
+* Fine-tune synthesis parameters for speed, style, and quality.
 
-## Fast and High-Quality Zero-Shot Text-to-Speech with Flow Matching
-</div>
+---
 
-## Overview
+## 🙏 Credits
 
-ZipVoice is a series of fast and high-quality zero-shot TTS models based on flow matching.
+A huge thanks to the developers of the original **[ZipVoice](https://github.com/k2-fsa/ZipVoice)** project — without their work, this app would not be possible.
+This UI simply wraps their powerful TTS models in an accessible web interface.
 
-### 1. Key features
+---
 
-- Small and fast: only 123M parameters.
+## 🔹 Features
 
-- High-quality voice cloning: state-of-the-art performance in speaker similarity, intelligibility, and naturalness.
+### 🎤 Single-Speaker Mode
 
-- Multi-lingual: support Chinese and English.
+* Upload a short WAV file and transcription (or auto-transcribe with Whisper).
+* Type any text to synthesize in the cloned voice.
+* Adjustable synthesis parameters:
 
-- Multi-mode: support both single-speaker and dialogue speech generation.
+  * `num_step`
+  * `guidance_scale`
+  * `speed`
+  * `t_shift`
+  * `target_rms`
+  * `feat_scale`
 
-### 2. Model variants
+### 💬 Dialogue Mode
 
-<table>
-  <thead>
-    <tr>
-      <th>Model Name</th>
-      <th>Description</th>
-      <th>Paper</th>
-      <th>Demo</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>ZipVoice</td>
-      <td>The basic model supporting zero-shot single-speaker TTS in both Chinese and English.</td>
-      <td rowspan="2"><a href="https://arxiv.org/abs/2506.13053"><img src="https://img.shields.io/badge/arXiv-Paper-COLOR.svg"></a></td>
-      <td rowspan="2"><a href="https://zipvoice.github.io"><img src="https://img.shields.io/badge/GitHub.io-Demo_Page-blue?logo=Github&style=flat-square"></a></td>
-    </tr>
-    <tr>
-      <td>ZipVoice-Distill</td>
-      <td>The distilled version of ZipVoice, featuring improved speed with minimal performance degradation.</td>
-    </tr>
-    <tr>
-      <td>ZipVoice-Dialog</td>
-      <td>A dialogue generation model built on ZipVoice, capable of generating single-channel two-party spoken dialogues.</td>
-      <td rowspan="2"><a href="https://arxiv.org/abs/2507.09318"><img src="https://img.shields.io/badge/arXiv-Paper-COLOR.svg"></a></td>
-      <td rowspan="2"><a href="https://zipvoice-dialog.github.io"><img src="https://img.shields.io/badge/GitHub.io-Demo_Page-blue?logo=Github&style=flat-square"></a></td>
-    </tr>
-    <tr>
-      <td>ZipVoice-Dialog-Stereo</td>
-      <td>The stereo variant of ZipVoice-Dialog, enabling two-channel dialogue generation with each speaker assigned to a distinct channel.</td>
-    </tr>
-  </tbody>
-</table>
+* Two prompt modes:
 
-## News
+  * **Merged** – one WAV containing both speakers.
+  * **Split** – separate WAVs + transcriptions for each speaker.
+* Dialogue text must start with `[S1]` and alternate between `[S1]` / `[S2]`.
+* Stereo or mono dialogue generation.
+* Optional silence WAV for stereo split.
 
-**2025/07/14**: **ZipVoice-Dialog** and **ZipVoice-Dialog-Stereo**, two spoken dialogue generation models, are released. [![arXiv](https://img.shields.io/badge/arXiv-Paper-COLOR.svg)](https://arxiv.org/abs/2507.09318) [![demo page](https://img.shields.io/badge/GitHub.io-Demo_Page-blue?logo=Github&style=flat-square)](https://zipvoice-dialog.github.io)
+### 🔊 Whisper Auto-Transcription
 
-**2025/07/14**: **OpenDialog** dataset, a 6.8k-hour spoken dialogue dataset, is realeased. Download at [![hf](https://img.shields.io/badge/%F0%9F%A4%97%20HuggingFace-Dataset-yellow)](https://huggingface.co/datasets/k2-fsa/OpenDialog), [![ms](https://img.shields.io/badge/ModelScope-Dataset-blue?logo=data)](https://www.modelscope.cn/datasets/k2-fsa/OpenDialog). Check details at [![arXiv](https://img.shields.io/badge/arXiv-Paper-COLOR.svg)](https://arxiv.org/abs/2507.09318).
+* Multiple Whisper model sizes: `tiny`, `base`, `small`, `medium`, `large-v3`.
+* Optional language override for transcription.
 
-**2025/06/16**: **ZipVoice** and **ZipVoice-Distill** are released. [![arXiv](https://img.shields.io/badge/arXiv-Paper-COLOR.svg)](https://arxiv.org/abs/2506.13053) [![demo page](https://img.shields.io/badge/GitHub.io-Demo_Page-blue?logo=Github&style=flat-square)](https://zipvoice.github.io)
+---
 
-## Installation
+## 📦 Installation
 
-### 1. Clone the ZipVoice repository
+1. **Clone the repository**:
+
+   ```bash
+   git clone https://github.com/SUP3RMASS1VE/ZipVoice-UI.git
+   cd ZipVoice-UI
+   ```
+
+2. **Install dependencies**:
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+   Main libraries include:
+
+   * `torch`
+   * `gradio`
+   * `huggingface_hub`
+   * `faster-whisper`
+   * ZipVoice + tokenizer dependencies
+
+3. **(Optional) Install GPU-enabled PyTorch**
+   If you have CUDA:
+
+   ```bash
+   pip install torch --index-url https://download.pytorch.org/whl/cu118
+   ```
+
+---
+
+## 🚀 Running the App
 
 ```bash
-git clone https://github.com/k2-fsa/ZipVoice.git
+python zipvoice/bin/gradio_app.py
 ```
 
-### 2. (Optional) Create a Python virtual environment
+By default, the UI will be served at:
+
+```
+http://127.0.0.1:7860
+```
+
+You can change the port with:
 
 ```bash
-python3 -m venv zipvoice
-source zipvoice/bin/activate
+PORT=9000 python zipvoice/bin/gradio_app.py
 ```
 
-### 3. Install the required packages
+---
 
-```bash
-pip install -r requirements.txt
-```
+## 🛠 Usage
 
-### 4. Install k2 for training or efficient inference
+### Single-Speaker
 
-**k2 is necessary for training** and can speed up inference. Nevertheless, you can still use the inference mode of ZipVoice without installing k2.
+1. Select **Model** (`zipvoice` or `zipvoice_distill`) and **Tokenizer**.
+2. Upload **Prompt WAV** + transcription (or auto-transcribe with Whisper).
+3. Type your synthesis text.
+4. Adjust advanced settings if desired.
+5. Click **Generate**.
 
-> **Note:**  Make sure to install the k2 version that matches your PyTorch and CUDA version. For example, if you are using pytorch 2.5.1 and CUDA 12.1, you can install k2 as follows:
+### Dialogue
 
-```bash
-pip install k2==1.24.4.dev20250208+cuda12.1.torch2.5.1 -f https://k2-fsa.github.io/k2/cuda.html
-```
+1. Select **Dialog Model** (`zipvoice_dialog` or `zipvoice_dialog_stereo`).
+2. Choose prompt mode (merged or split) and provide audio + text prompts.
+3. Enter conversation text, starting with `[S1]`.
+4. Adjust advanced settings if desired.
+5. Click **Generate Dialogue**.
 
-Please refer to https://k2-fsa.org/get-started/k2/ for details.
-Users in China mainland can refer to https://k2-fsa.org/zh-CN/get-started/k2/.
+---
 
-- To check the k2 installation:
+## 📂 Model Files
 
-```
-python3 -c "import k2; print(k2.__file__)"
-```
+* **Automatic download** from HuggingFace is supported.
+* You can also provide **local model directories** containing:
 
-## Usage
+  * `model.pt` or `.safetensors`
+  * `model.json`
+  * `tokens.txt`
+* Optional **vocoder directory**:
 
-### 1. Single-speaker speech generation
+  * `config.yaml`
+  * `pytorch_model.bin`
 
-To generate single-speaker speech with our pre-trained ZipVoice or ZipVoice-Distill models, use the following commands (Required models will be downloaded from HuggingFace):
+---
 
-#### 1.1 Inference of a single sentence
+## ⚖ License
 
-```bash
-python3 -m zipvoice.bin.infer_zipvoice \
-    --model-name zipvoice \
-    --prompt-wav prompt.wav \
-    --prompt-text "I am the transcription of the prompt wav." \
-    --text "I am the text to be synthesized." \
-    --res-wav-path result.wav
-```
+MIT License (or as defined by the repository owner).
 
-- `--model-name` can be `zipvoice` or `zipvoice_distill`, which are models before and after distillation, respectively.
-- If `<>` or `[]` appear in the text, strings enclosed by them will be treated as special tokens. `<>` denotes Chinese pinyin and `[]` denotes other special tags.
-- Could run ONNX models on CPU faster with `zipvoice.bin.infer_zipvoice_onnx`.
+Special thanks again to the [ZipVoice](https://github.com/k2-fsa/ZipVoice) team for their incredible work on the original model.
 
-> **Note:** If you have trouble connecting to HuggingFace, try:
-> ```bash
-> export HF_ENDPOINT=https://hf-mirror.com
-> ```
+---
 
-#### 1.2 Inference of a list of sentences
 
-```bash
-python3 -m zipvoice.bin.infer_zipvoice \
-    --model-name zipvoice \
-    --test-list test.tsv \
-    --res-dir results
-```
-
-- Each line of `test.tsv` is in the format of `{wav_name}\t{prompt_transcription}\t{prompt_wav}\t{text}`.
-
-### 2. Dialogue speech generation
-
-#### 2.1 Inference command
-
-To generate two-party spoken dialogues with our pre-trained ZipVoice-Dialogue or ZipVoice-Dialogue-Stereo models, use the following commands (Required models will be downloaded from HuggingFace):
-
-```bash
-python3 -m zipvoice.bin.infer_zipvoice_dialog \
-    --model-name "zipvoice_dialog" \
-    --test-list test.tsv \
-    --res-dir results
-```
-
-- `--model-name` can be `zipvoice_dialog` or `zipvoice_dialog_stereo`,
-    which generate mono and stereo dialogues, respectively.
-
-#### 2.2 Input formats
-
-Each line of `test.tsv` is in one of the following formats:
-
-(1) **Merged prompt format** where the audios and transcriptions of two speakers prompts are merged into one prompt wav file:
-```
-{wav_name}\t{prompt_transcription}\t{prompt_wav}\t{text}
-```
-
-- `wav_name` is the name of the output wav file.
-- `prompt_transcription` is the transcription of the conversational prompt wav, e.g, "[S1] Hello. [S2] How are you?"
-- `prompt_wav` is the path to the prompt wav.
-- `text` is the text to be synthesized, e.g. "[S1] I'm fine. [S2] What's your name? [S1] I'm Eric. [S2] Hi Eric."
-
-(2) **Splitted prompt format** where the audios and transciptions of two speakers exist in separate files:
-
-```
-{wav_name}\t{spk1_prompt_transcription}\t{spk2_prompt_transcription}\t{spk1_prompt_wav}\t{spk2_prompt_wav}\t{text}'
-```
-
-- `wav_name` is the name of the output wav file.
-- `spk1_prompt_transcription` is the transcription of the first speaker's prompt wav, e.g, "Hello"
-- `spk2_prompt_transcription` is the transcription of the second speaker's prompt wav, e.g, "How are you?"
-- `spk1_prompt_wav` is the path to the first speaker's prompt wav file.
-- `spk2_prompt_wav` is the path to the second speaker's prompt wav file.
-- `text` is the text to be synthesized, e.g. "[S1] I'm fine. [S2] What's your name? [S1] I'm Eric. [S2] Hi Eric."
-
-### 3. Other features
-
-#### 3.1 Correcting mispronounced chinese polyphone characters
-
-We use [pypinyin](https://github.com/mozillazg/python-pinyin) to convert Chinese characters to pinyin. However, it can occasionally mispronounce **polyphone characters** (多音字).
-
-To manually correct these mispronunciations, enclose the **corrected pinyin** in angle brackets `< >` and include the **tone mark**.
-
-**Example:**
-
-- Original text: `这把剑长三十公分`
-- Correct the pinyin of `长`:  `这把剑<chang2>三十公分`
-
-> **Note:** If you want to manually assign multiple pinyins, enclose each pinyin with `<>`, e.g., `这把<jian4><chang2><san1>十公分`
-
-## Train Your Own Model
-
-See the [egs](egs) directory for training, fine-tuning and evaluation examples.
-
-## Discussion & Communication
-
-You can directly discuss on [Github Issues](https://github.com/k2-fsa/ZipVoice/issues).
-
-You can also scan the QR code to join our wechat group or follow our wechat official account.
-
-| Wechat Group | Wechat Official Account |
-| ------------ | ----------------------- |
-|![wechat](https://k2-fsa.org/zh-CN/assets/pic/wechat_group.jpg) |![wechat](https://k2-fsa.org/zh-CN/assets/pic/wechat_account.jpg) |
-
-## Citation
-
-```bibtex
-@article{zhu2025zipvoice,
-      title={ZipVoice: Fast and High-Quality Zero-Shot Text-to-Speech with Flow Matching},
-      author={Zhu, Han and Kang, Wei and Yao, Zengwei and Guo, Liyong and Kuang, Fangjun and Li, Zhaoqing and Zhuang, Weiji and Lin, Long and Povey, Daniel},
-      journal={arXiv preprint arXiv:2506.13053},
-      year={2025}
-}
-
-@article{zhu2025zipvoicedialog,
-      title={ZipVoice-Dialog: Non-Autoregressive Spoken Dialogue Generation with Flow Matching},
-      author={Zhu, Han and Kang, Wei and Guo, Liyong and Yao, Zengwei and Kuang, Fangjun and Zhuang, Weiji and Li, Zhaoqing and Han, Zhifeng and Zhang, Dong and Zhang, Xin and Song, Xingchen and Lin, Long and Povey, Daniel},
-      journal={arXiv preprint arXiv:2507.09318},
-      year={2025}
-}
-```
