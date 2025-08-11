@@ -479,15 +479,30 @@ def generate_sentence_stereo(
 
     # Start vocoder processing
     start_vocoder_t = dt.datetime.now()
-    feat_dim = pred_features.size(1) // 2
-    wav_left = vocoder.decode(pred_features[:, :feat_dim]).squeeze(1).clamp(-1, 1)
-    wav_right = (
-        vocoder.decode(pred_features[:, feat_dim : feat_dim * 2])
-        .squeeze(1)
-        .clamp(-1, 1)
-    )
+    # Determine expected feature channels for the vocoder
+    try:
+        expected_c = int(getattr(vocoder.backbone.embed, "in_channels"))  # type: ignore[attr-defined]
+    except Exception:
+        expected_c = pred_features.size(1)
 
-    wav = torch.cat([wav_left, wav_right], dim=0)
+    channels = pred_features.size(1)
+
+    if channels == 2 * expected_c or channels % 2 == 0 and channels > expected_c:
+        # Standard stereo: split channels in half
+        feat_dim = channels // 2
+        wav_left = (
+            vocoder.decode(pred_features[:, :feat_dim]).squeeze(1).clamp(-1, 1)
+        )
+        wav_right = (
+            vocoder.decode(pred_features[:, feat_dim : feat_dim * 2])
+            .squeeze(1)
+            .clamp(-1, 1)
+        )
+        wav = torch.cat([wav_left, wav_right], dim=0)
+    else:
+        # Fallback: features are not doubled; decode once and duplicate to stereo
+        mono_wav = vocoder.decode(pred_features).squeeze(1).clamp(-1, 1)
+        wav = torch.cat([mono_wav, mono_wav], dim=0)
 
     # Calculate processing times and real-time factors
     t = (dt.datetime.now() - start_t).total_seconds()
