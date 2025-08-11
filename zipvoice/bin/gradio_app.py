@@ -5,6 +5,7 @@ import os
 import sys
 import tempfile
 import time
+import gc
 from pathlib import Path
 from typing import Dict, Optional, Tuple
 
@@ -416,12 +417,28 @@ def get_whisper(model_size: str = "small", device: Optional[str] = None) -> Whis
     return model
 
 
-def transcribe_file(audio_path: str, model_size: str, lang: Optional[str]) -> str:
+def transcribe_file(
+    audio_path: str,
+    model_size: str,
+    lang: Optional[str],
+    unload: bool = False,
+) -> str:
     if not audio_path:
         return ""
-    model = get_whisper(model_size)
+    # Determine device the same way as get_whisper
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    model = get_whisper(model_size, device=device)
     segments, _ = model.transcribe(audio_path, language=lang if lang else None)
-    return " ".join(seg.text.strip() for seg in segments).strip()
+    text = " ".join(seg.text.strip() for seg in segments).strip()
+    if unload:
+        try:
+            _whisper_cache.pop((model_size, device), None)
+            del model
+            if device == "cuda":
+                torch.cuda.empty_cache()
+        finally:
+            gc.collect()
+    return text
 
 def ui_infer_dialog(
     model_name: str,
@@ -690,7 +707,7 @@ def build_app() -> gr.Blocks:
                 def _maybe_tx(path, enabled, size, lang):
                     if enabled and path:
                         try:
-                            return transcribe_file(path, size, lang)
+                            return transcribe_file(path, size, lang, unload=True)
                         except Exception as e:
                             return f"[ASR error] {e}"
                     return gr.update()
@@ -824,7 +841,7 @@ def build_app() -> gr.Blocks:
                 def _maybe_tx_dialog(path, enabled, size, lang):
                     if enabled and path:
                         try:
-                            return transcribe_file(path, size, lang)
+                            return transcribe_file(path, size, lang, unload=True)
                         except Exception as e:
                             return f"[ASR error] {e}"
                     return gr.update()

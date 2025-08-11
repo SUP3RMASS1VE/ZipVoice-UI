@@ -65,6 +65,7 @@ import onnxruntime as ort
 import torch
 import torchaudio
 from huggingface_hub import hf_hub_download
+import os
 from lhotse.utils import fix_random_seed
 from torch import Tensor, nn
 
@@ -366,7 +367,17 @@ def sample(
     )  # (B, T, F)
     guidance_scale = torch.tensor(guidance_scale, dtype=torch.float32)
 
-    for step in range(num_step):
+    use_tqdm = os.environ.get("ZIPVOICE_TQDM", "1") != "0"
+    iterator = range(num_step)
+    if use_tqdm:
+        try:
+            from tqdm import tqdm
+
+            iterator = tqdm(iterator, desc="ZipVoice ONNX steps", total=num_step)
+        except Exception:
+            pass
+
+    for step in iterator:
         v = model.run_fm_decoder(
             t=timesteps[step],
             x=x,

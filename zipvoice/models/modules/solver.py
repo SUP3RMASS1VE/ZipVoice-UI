@@ -16,6 +16,7 @@
 # limitations under the License.
 
 from typing import Optional, Union
+import os
 
 import torch
 
@@ -178,6 +179,7 @@ class EulerSolver:
         """
 
         self.model = DiffusionModel(model, func_name=func_name)
+        import os  # local import to avoid polluting namespace if unused
 
     def sample(
         self,
@@ -226,7 +228,18 @@ class EulerSolver:
             device=device,
         )
 
-        for step in range(num_step):
+        # Optional terminal progress bar
+        use_tqdm = os.environ.get("ZIPVOICE_TQDM", "1") != "0"
+        iterator = range(num_step)
+        if use_tqdm:
+            try:
+                from tqdm import tqdm
+
+                iterator = tqdm(iterator, desc="ZipVoice steps", total=num_step)
+            except Exception:
+                pass
+
+        for step in iterator:
             v = self.model(
                 t=timesteps[step],
                 x=x,
