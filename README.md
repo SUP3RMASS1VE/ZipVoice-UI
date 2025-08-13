@@ -1,6 +1,6 @@
 
 # ZipVoice-UI
-<img width="1694" height="1229" alt="Screenshot 2025-08-11 171353" src="https://github.com/user-attachments/assets/d8fe1a41-5dfa-4838-8e6e-ae1c2d25a650" />
+<img width="1692" height="1259" alt="Screenshot 2025-08-13 134426" src="https://github.com/user-attachments/assets/3320ed00-004c-434c-96e7-04ff110512b8" />
 
 A **Gradio-based web interface** for the [ZipVoice](https://github.com/k2-fsa/ZipVoice) speech synthesis system.
 This UI makes it easy to:
