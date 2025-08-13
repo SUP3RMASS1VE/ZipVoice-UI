@@ -58,6 +58,9 @@ Install via [Pinokio](https://pinokio.co)
 You can use the Pinokio script here for one-click setup:
 [Pinokio App Installer](https://pinokio.co/item.html?uri=https%3A%2F%2Fgithub.com%2FSUP3RMASS1VE%2FZipVoice-Pinokio&parent_frame=&theme=null)
 
+### Option 1a: Install via [Dione](https://getdione.app)
+
+You can also use [Dione](https://getdione.app) for an easy one-click installation experience:
 ---
 
 ## Option 2
