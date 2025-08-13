@@ -18,6 +18,18 @@ _PROJECT_ROOT = _FILE.parents[2]
 if str(_PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(_PROJECT_ROOT))
 
+# Silence the noisy k2 fallback warning from scaling.py
+_root_logger = logging.getLogger()
+
+class _SilenceK2Fallback(logging.Filter):
+    def filter(self, record: logging.LogRecord) -> bool:
+        msg = record.getMessage()
+        if "Failed import k2" in msg and "Swoosh functions will fallback" in msg:
+            return False
+        return True
+
+_root_logger.addFilter(_SilenceK2Fallback())
+
 from zipvoice.bin.infer_zipvoice import (
     HUGGINGFACE_REPO,
     MODEL_DIR,
@@ -557,93 +569,217 @@ def ui_infer(
 
 
 def _make_theme():
+    # Dark, glassy theme with vibrant violet/blue accents, similar to Ultimate TTS Studio SUP3R Edition
     try:
         theme = gr.themes.Soft(
             primary_hue="violet",
-            secondary_hue="sky",
-            neutral_hue="slate",
+            secondary_hue="blue",
+            neutral_hue="gray",
         ).set(
-            body_background_fill="#0b1020",
+            body_background_fill="#0b0b10",
             body_text_color="#e5e7eb",
-            block_background_fill="#0f1629",
-            block_border_width="1px",
-            block_border_color="#232b46",
-            block_shadow="0 8px 24px 0 rgba(124,58,237,.18)",
+            block_background_fill="#101218",
+            block_border_color="#23252d",
+            block_label_text_color="#e5e7eb",
+            block_title_text_color="#fafafa",
+            block_shadow="0 10px 30px rgba(0,0,0,0.35)",
+            input_background_fill="#0f1219",
+            input_border_color="#2a2b33",
+            input_border_color_focus="#7c3aed",
+            input_text_color="#e5e7eb",
+            link_text_color="#a78bfa",
+            radius_sm="8px",
+            radius_md="12px",
+            radius_lg="14px",
+            # Primary buttons
             button_primary_background_fill="#7c3aed",
             button_primary_background_fill_hover="#8b5cf6",
             button_primary_text_color="#ffffff",
-            input_background_fill="#0f1629",
-            input_border_color="#27304d",
-            radius_md="14px",
-            radius_lg="16px",
-            font=["Inter", "ui-sans-serif", "system-ui"],
-            font_mono=["JetBrains Mono", "ui-monospace", "SFMono-Regular"],
+            button_primary_border_color="#7c3aed",
         )
+        return theme
     except Exception:
-        theme = None
-    return theme
+        # Fallback in case of older gradio versions
+        return None
 
 
 _CSS = """
-/* Background + overall look */
-.gradio-container{background:linear-gradient(180deg,#0a0f1f 0%,#0a0e1a 40%,#0b1020 100%) fixed}
-.gradio-container .markdown h3{color:#e5e7eb;font-weight:800;letter-spacing:.2px}
-.gradio-container .tabs{background:rgba(255,255,255,0.02);border:1px solid #232b46;border-radius:14px;padding:6px}
-.gradio-container .tabitem{padding-top:8px}
-
-/* Cards / panels */
-.gradio-container .gr-panel, .gradio-container .gr-group, .gradio-container .gr-accordion, .gradio-container .block{
-  border-radius:16px!important;
-  background:#0f1629!important;
-  border:1px solid #232b46!important;
-  box-shadow:0 8px 26px rgba(124,58,237,.15)!important;
+/* Force consistent appearance regardless of system theme preference */
+* {
+  color-scheme: dark !important;
 }
-.gradio-container .gr-accordion .label-wrap{background:#0f1629}
+
+/* Global background with subtle galaxy-like accents - forced for both light and dark mode */
+.gradio-container,
+.gradio-container.light,
+.gradio-container.dark,
+body,
+html {
+  font-family: Inter, ui-sans-serif, system-ui, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji" !important;
+  background:
+    radial-gradient(1200px circle at 10% 10%, rgba(124,58,237,0.08), transparent 40%),
+    radial-gradient(1000px circle at 90% 0%, rgba(59,130,246,0.06), transparent 40%),
+    #0b0b10 !important;
+  color: #e5e7eb !important;
+}
+
+/* Headings - forced for both light and dark mode */
+.gradio-container .prose h3,
+.gradio-container .gr-markdown h3,
+.gradio-container.light .prose h3,
+.gradio-container.light .gr-markdown h3,
+.gradio-container.dark .prose h3,
+.gradio-container.dark .gr-markdown h3 {
+  color: #fafafa !important;
+}
+
+/* Glass card blocks - forced for both light and dark mode */
+.gradio-container .block,
+.gradio-container .form,
+.gradio-container .panel,
+.gradio-container.light .block,
+.gradio-container.light .form,
+.gradio-container.light .panel,
+.gradio-container.dark .block,
+.gradio-container.dark .form,
+.gradio-container.dark .panel {
+  background: rgba(255, 255, 255, 0.03) !important;
+  border: 1px solid rgba(255, 255, 255, 0.06) !important;
+  border-radius: 12px !important;
+  backdrop-filter: blur(8px);
+  /* Important: do not clip dropdown menus */
+  overflow: visible !important;
+  position: relative !important;
+}
+
+/* Elevate the currently active block so its dropdown list appears above neighbors - forced for both modes */
+.gradio-container .block:focus-within,
+.gradio-container .form:focus-within,
+.gradio-container .panel:focus-within,
+.gradio-container.light .block:focus-within,
+.gradio-container.light .form:focus-within,
+.gradio-container.light .panel:focus-within,
+.gradio-container.dark .block:focus-within,
+.gradio-container.dark .form:focus-within,
+.gradio-container.dark .panel:focus-within {
+  z-index: 2000 !important;
+}
+
+/* Ensure common layout wrappers also don't clip and can layer */
+.gradio-container .gr-block,
+.gradio-container .gr-form,
+.gradio-container .gr-row,
+.gradio-container .gr-column,
+.gradio-container .gr-panel {
+  overflow: visible !important;
+  position: relative !important;
+}
 
 /* Inputs */
-.gradio-container input, .gradio-container textarea, .gradio-container select{
-  background:#0f172a!important; border:1px solid #27304d!important; color:#e5e7eb!important;
-}
-.gradio-container .wrap.svelte-drumf7:focus-within, .gradio-container .wrap:focus-within{
-  box-shadow:0 0 0 2px #7c3aed33, 0 0 0 1px #7c3aed inset!important; border-radius:12px
-}
-
-/* Labels */
-label, .gradio-container .label{text-transform:uppercase;letter-spacing:.03em;font-weight:700;color:#9aa7c7}
-
-/* Buttons */
-.gradio-container .gr-button{border:none;border-radius:12px}
-.gradio-container .gr-button-primary{background:linear-gradient(90deg,#7c3aed 0%,#8b5cf6 100%); color:#fff}
-.gradio-container .gr-button-primary:hover{filter:brightness(1.06); box-shadow:0 8px 20px rgba(139,92,246,.35)}
-.gradio-container #cta-generate, .gradio-container #d-cta-generate{
-  width:100%; height:44px; font-weight:800; letter-spacing:.02em; text-transform:uppercase
+.gradio-container input,
+.gradio-container textarea,
+.gradio-container select {
+  background: rgba(255, 255, 255, 0.02) !important;
+  border-color: #2a2b33 !important;
+  color: #e5e7eb !important;
 }
 
-/* Sliders */
-.gradio-container input[type=range]::-webkit-slider-thumb{background:#8b5cf6;border:2px solid #c4b5fd}
-.gradio-container input[type=range]{accent-color:#8b5cf6}
-
-/* Tabs active state */
-.gradio-container .tab-nav button.svelte-1ipelgc[aria-selected="true"], .gradio-container .tabitem .tabitem-buttons .selected{
-  background:#1a2140!important; color:#e8e8ff!important; box-shadow:0 10px 24px rgba(124,58,237,.18)
+/* Tabs */
+.gradio-container .tabs {
+  border: 0 !important;
+}
+.gradio-container .tabitem {
+  background: transparent !important;
+}
+.gradio-container .tab-nav button {
+  border-radius: 10px !important;
 }
 
-/* Audio blocks */
-.gradio-container .audio{background:#0c1428;border:1px dashed #2a355a}
+/* Dropdowns: ensure options are visible and above cards */
+.gradio-container .wrap,
+.gradio-container .dropdown,
+.gradio-container .select,
+.gradio-container .container,
+.gradio-container .label-wrap,
+.gradio-container .input-wrap,
+.gradio-container .autocomplete,
+.gradio-container .autocomplete-container,
+.gradio-container .autocomplete-wrap,
+.gradio-container .autocomplete__control,
+.gradio-container .autocomplete__menu,
+.gradio-container .autocomplete__value-container,
+.gradio-container .autocomplete__indicators {
+  overflow: visible !important;
+  position: relative !important;
+}
+.gradio-container [data-testid="dropdown-options"],
+.gradio-container div[role="listbox"],
+.gradio-container .options,
+.gradio-container .dropdown-menu {
+  z-index: 3000 !important;
+  /* Let Gradio's inline left/top handle placement */
+  position: absolute !important;
+  inset: auto !important;
+  background: #0f1219 !important;
+  border: 1px solid #2a2b33 !important;
+  border-radius: 10px !important;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.35) !important;
+}
+.gradio-container [data-testid="dropdown-options"] *,
+.gradio-container div[role="option"],
+.gradio-container .dropdown-menu * {
+  color: #e5e7eb !important;
+}
+.gradio-container div[role="option"][aria-selected="true"] {
+  background: rgba(124,58,237,0.20) !important;
+}
+.gradio-container div[role="option"]:hover {
+  background: rgba(124,58,237,0.15) !important;
+}
+
+/* Primary call-to-action buttons */
+#cta-generate button,
+#d-cta-generate button {
+  background-image: linear-gradient(135deg, #7c3aed 0%, #2563eb 100%) !important;
+  color: #ffffff !important;
+  border: 0 !important;
+  box-shadow: 0 10px 24px -10px rgba(124, 58, 237, 0.8), 0 6px 20px -15px rgba(37, 99, 235, 0.6) !important;
+}
+#cta-generate button:hover,
+#d-cta-generate button:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+#cta-generate button:active,
+#d-cta-generate button:active {
+  transform: translateY(0);
+}
+
+/* Fancy centered title */
+#app-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 0 6px;
+  margin: 2px 0 6px;
+}
+#app-title {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  background: linear-gradient(92deg, #c4b5fd 0%, #60a5fa 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 6px 24px rgba(124,58,237,0.25), 0 2px 10px rgba(37,99,235,0.2);
+}
 """
 
 
 def build_app() -> gr.Blocks:
     theme = _make_theme()
     with gr.Blocks(title="ZipVoice Web UI", theme=theme, css=_CSS) as demo:
-        gr.Markdown(
-            """
-            <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
-              <div style="width:10px;height:10px;border-radius:50%;background:#22d3ee;box-shadow:0 0 18px #22d3ee"></div>
-              <h3 style="margin:0">ZipVoice</h3>
-            </div>
-            """
-        )
+        gr.HTML('<div id="app-header"><div id="app-title">ZipVoice</div></div>')
 
         with gr.Tabs():
             with gr.Tab("Single-speaker"):
